@@ -1,10 +1,7 @@
 ﻿using Business.Abstract;
-using Business.Constants;
-using Core.Utilities.Results;
 using DataAccess.Abstract;
 using DataAccess.Concrete.InMemory;
 using Entities.Concrete;
-using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,26 +17,18 @@ namespace Business.Concrete
             _productDal = productDal;
         }
 
-        public IResult Add(Product product)
+        public List<Product> GetAll()
         {
-            //business codes
+            //İş kodları
+            //Yetkisi var mı?
 
-            if (product.ProductName.Length<2)
-            {
-                //magic strings
-                return new ErrorResult(Messages.ProductNameInvalid);
-            }
-            _productDal.Add(product);
-
-            return new SuccessResult(Messages.ProductAdded);
+            return _productDal.GetAll();
         }
 
-        public IDataResult<List<Product>> GetAll()
+        public List<Product> GetAllByCategoryId(int id)
         {
-            if (DateTime.Now.Hour==22)
-            {
-                return new ErrorDataResult<List<Product>>(Messages.MaintenanceTime);
-            }
+            return _productDal.GetAll(p=>p.CategoryId==id);
+        }
 
             return new SuccessDataResult<List<Product>>(_productDal.GetAll(),Messages.ProductsListed);
         }
@@ -61,7 +50,7 @@ namespace Business.Concrete
 
         public IDataResult<List<ProductDetailDto>> GetProductDetails()
         {
-            if (DateTime.Now.Hour == 22)
+            if (DateTime.Now.Hour == 23)
             {
                 return new ErrorDataResult<List<ProductDetailDto>>(Messages.MaintenanceTime);
             }
