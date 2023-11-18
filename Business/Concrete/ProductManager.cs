@@ -59,13 +59,9 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Product>>(_productDal.GetAll(p=>p.UnitPrice>=min && p.UnitPrice<=max));
         }
 
-        public IDataResult<List<ProductDetailDto>> GetProductDetails()
+        public List<Product> GetByUnitPrice(decimal min, decimal max)
         {
-            if (DateTime.Now.Hour == 22)
-            {
-                return new ErrorDataResult<List<ProductDetailDto>>(Messages.MaintenanceTime);
-            }
-            return new SuccessDataResult<List<ProductDetailDto>>(_productDal.GetProductDetails());
+            return _productDal.GetAll(p=>p.UnitPrice>=min && p.UnitPrice<=max);
         }
     }
 }
